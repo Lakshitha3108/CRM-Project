@@ -1,0 +1,6 @@
+orm query
+
+model Students
+
+
+Students.objects.create(first_name='Alex',last_name='peter',email='alex@gmail.com')

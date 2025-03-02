@@ -56,16 +56,33 @@ class StudentsListView(View):
 
         query = request.GET.get('query')
 
-        # all_students = students.objects.all()
+        role = request.user.role
 
-        all_students = students.objects.filter(active_status=True)
+        if role in ('Trainer'):
 
-        if query :
+            all_students = students.objects.filter(active_status = True,trainer__profile=request.user)
+
+            if query :
 
             # all_students = students.objects.filter(Q(active_status = True)&(Q(first_name_icontains = query)|Q(last_nameicontains = query)|Q(emailicontains = query)|Q(contact_numicontains = query)|Q(house_nameicontains = query)|Q(pincode_icontains = query)))
            
 
-            all_students = students.objects.filter(Q(active_status=True)&(Q(first_name__icontains=query)|Q(last_name__icontains=query)|Q(contact_num__icontains=query)|Q(house_name__icontains=query)|Q(post_office__icontains=query)|Q(pincode__icontains=query)|Q(course__code__icontains=query)))
+                all_students = students.objects.filter(Q(active_status=True)&Q(trainer__profile=request.user)&(Q(first_name__icontains=query)|Q(last_name__icontains=query)|Q(contact_num__icontains=query)|Q(house_name__icontains=query)|Q(post_office__icontains=query)|Q(pincode__icontains=query)|Q(course__code__icontains=query)))
+
+
+        else :
+
+
+        # all_students = students.objects.all()
+
+            all_students = students.objects.filter(active_status=True)
+
+            if query :
+
+            # all_students = students.objects.filter(Q(active_status = True)&(Q(first_name_icontains = query)|Q(last_nameicontains = query)|Q(emailicontains = query)|Q(contact_numicontains = query)|Q(house_nameicontains = query)|Q(pincode_icontains = query)))
+           
+
+               all_students = students.objects.filter(Q(active_status=True)&(Q(first_name__icontains=query)|Q(last_name__icontains=query)|Q(contact_num__icontains=query)|Q(house_name__icontains=query)|Q(post_office__icontains=query)|Q(pincode__icontains=query)|Q(course__code__icontains=query)))
 
         for student in all_students:
 

@@ -1,0 +1,22 @@
+<html lang="en">
+<head>
+ <style>
+    @media screen and (max-width: 480px){
+        .card{
+            max-width: 400px;
+            
+        }
+    }
+ </style>   
+</head>
+<body>
+    <div style="background-size:cover; height: 500px;">
+            <div class="card" style="width: 600px; margin: 0px auto; padding: 20px; background-color: white; border: 1px solid #e7e9eb; border-radius: 2%;">
+                <h4>Hi {{name}},</h4>
+                <p>Your Payment is due. Please Pay as soon as Possible</p>
+                <p><a class="text-decoration-none" href="{%url 'login'%}">login now</a></p>
+              </div>
+       
+    </div>   
+</body>
+</html>

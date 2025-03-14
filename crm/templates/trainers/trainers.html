@@ -1,7 +1,6 @@
 {%extends 'base.html'%}
 {%load check_roles%}
-
-{%block section%}
+{% block section%}
 <main class="h-full pb-16 overflow-y-auto">
   <div class="container grid px-6 mx-auto">
     <!-- With actions -->
@@ -10,14 +9,15 @@
       <h4
         class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300 my-6"
       >
-        Students
+        Trainers
       </h4>
-      {%check_user_role request 'Admin,Sales' as allow%}
+
+      {%check_user_roles request 'Admin' as allow%}
       {%if allow%}
       <div>
-        <a href="{%url 'registration-form'%}">
+        <a href="{%url 'form-list'%}">
         <button class="px-5 py-3 font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
-          Add Student
+          Add Trainer
         </button>
       </a>
       </div>
@@ -34,16 +34,17 @@
               <th class="px-4 py-3">Admission Number</th>
               <th class="px-4 py-3">Address</th>
               <th class="px-4 py-3">Contact Number</th>
-              <th class="px-4 py-3">Join Date</th>
-              <th class="px-4 py-3">Course</th>
-              <th class="px-4 py-3">Trainer</th>
+              <!-- <th class="px-4 py-3">Join Date</th> -->
+              <th class="px-4 py-3">course</th>
+              <!-- <th class="px-4 py-3">Trainer</th> -->
               <th class="px-4 py-3">Actions</th>
+              
             </tr>
           </thead>
           <tbody
             class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800"
           >
-            {%for student in students%}
+          {%for trainer in trainers%}
             <tr class="text-gray-700 dark:text-gray-400">
               <td class="px-4 py-3">
                 <div class="flex items-center text-sm">
@@ -51,9 +52,9 @@
                   <div
                     class="relative hidden w-8 h-8 mr-3 rounded-full md:block"
                   >
-                    <img
+                    <img 
                       class="object-cover w-full h-full rounded-full"
-                      src="{{student.photo.url}}"
+                      src="{{trainers.photo.url}}"
                       alt=""
                       loading="lazy"
                     />
@@ -63,41 +64,41 @@
                     ></div>
                   </div>
                   <div>
-                    <p class="font-semibold">{{student.first_name}} {{student.last_name}} </p>
+                    <p class="font-semibold">{{trainer.first_name}} {{trainer.last_name}}</p>
                     <p class="text-xs text-gray-600 dark:text-gray-400">
-                      {{student.batch.name}}
+                      {{trainer.course.name}}
                     </p>
                   </div>
                 </div>
               </td>
               <td class="px-4 py-3 text-sm">
-                {{student.adm_num}}
+                {{trainer.employee_id}}
               </td>
               <td class="px-4 py-3 text-xs">
                 <div
-                  class="px-4 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100"
+                  class="px-3 py-2 leading-tight text-green-700 bg-green-100 full dark:bg-green-700 dark:text-green-100"
                 >
-                 <p>{{student.house_name}},</p>
-                 <p>{{student.post_office}} P O {{student.district}}</p>
-                 <p>PIN: {{student.pincode}}</p>
+                  <p>{{trainer.house_name}},</p>
+                  <p>{{trainer.post_office}} P O {{trainer.district}}</p>
+                  <p>PIN : {{trainer.pincode}}</p>
                 </div>
               </td>
               <td class="px-4 py-3 text-sm">
-                {{student.contact_num}}
+                {{trainer.contact_num}}
               </td>
+              <!-- <td class="px-4 py-3 text-sm">
+                {{trainer.join_date | date:'d-m-Y'}}
+              </td> -->
               <td class="px-4 py-3 text-sm">
-                {{student.join_date | date:"d-m-Y"}}
+                {{trainer.course}}
               </td>
-              <td class="px-4 py-3 text-sm">
-                {{student.course.code}}
-              </td>
-              <td class="px-4 py-3 text-sm">
-                {{student.trainer.first_name}} {{student.trainer.last_name}}
-              </td>
+              <!-- <td class="px-4 py-3 text-sm">
+                {{trainer.trainer.first_name}} {{trainer.trainer.last_name}}
+              </td> -->
               <td class="px-4 py-3">
                 <div class="flex items-center space-x-4 text-sm">
-                  <a href="{%url 'student-detail' student.uuid%}">
-                    <buttond
+                  <a href="{%url 'trainers-detail' trainer.uuid%}">
+                    <button
                       class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                       aria-label="View"
                     >
@@ -112,11 +113,11 @@
                     ></path>
                     <circle cx="10" cy="10" r="2.5"></circle>
                                     </svg>
-                    </buttond>
+                    </button>
                   </a>
-                  {%check_user_role request 'Admin,Sales' as allow%}
+                  {%check_user_roles request 'Admin' as allow%}
                   {%if allow%}
-                  <a href="{%url 'student-update' student.uuid%}">
+                  <a href="{%url 'trainers-update' trainer.uuid%}">
                     <button
                       class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                       aria-label="Edit"
@@ -133,7 +134,7 @@
                       </svg>
                     </button>
                   </a>
-                  <a href="{%url 'student-delete' student.uuid%}">
+                  <a href="{%url 'trainers-delete' trainer.uuid%}">
                     <button
                       class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                       aria-label="Delete"
@@ -158,6 +159,7 @@
             </tr>
             {%endfor%}
 
+            
           </tbody>
         </table>
       </div>

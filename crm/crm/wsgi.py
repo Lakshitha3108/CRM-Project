@@ -11,6 +11,10 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
+from payments.cron import scheduler_start
+
+scheduler_start()
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'crm.settings')
 
 application = get_wsgi_application()

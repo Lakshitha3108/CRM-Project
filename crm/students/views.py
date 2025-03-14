@@ -1,12 +1,14 @@
 from django.shortcuts import render,redirect,get_object_or_404
 
+from django.http import HttpResponse
+
 from django.views.generic import View
 
 from . models import DistrictChoices,BatchChoices,CourseChoices,TrainerChoices
 
 from django . db . models import Q
 
-from .utility import get_admission_number,get_password
+from .utility import get_admission_number,get_password,send_email
 
 from .models import students
 
@@ -21,6 +23,14 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
 from authentication.permissions import permission_roles
+import  threading 
+import datetime
+
+# payment related imports
+
+from payments.models import Payment
+
+
 
 
 # Create your views here.
@@ -35,7 +45,7 @@ class GetStudentObject:
 
             return student
         
-        except:
+        except students.DoesNotExist:
 
             return render(request,'errorpages/error-404.html')
 
@@ -64,11 +74,19 @@ class StudentsListView(View):
 
             if query :
 
-            # all_students = students.objects.filter(Q(active_status = True)&(Q(first_name_icontains = query)|Q(last_nameicontains = query)|Q(emailicontains = query)|Q(contact_numicontains = query)|Q(house_nameicontains = query)|Q(pincode_icontains = query)))
+            #all_students = students.objects.filter(Q(active_status = True)&(Q(first_name_icontains = query)|Q(last_nameicontains = query)|Q(emailicontains = query)|Q(contact_numicontains = query)|Q(house_nameicontains = query)|Q(pincode_icontains = query)))
            
 
-                all_students = students.objects.filter(Q(active_status=True)&Q(trainer__profile=request.user)&(Q(first_name__icontains=query)|Q(last_name__icontains=query)|Q(contact_num__icontains=query)|Q(house_name__icontains=query)|Q(post_office__icontains=query)|Q(pincode__icontains=query)|Q(course__code__icontains=query)))
+             all_students = students.objects.filter(Q(active_status=True)&Q(trainer__profile=request.user)&(Q(first_name__icontains=query)|Q(last_name__icontains=query)|Q(contact_num__icontains=query)|Q(house_name__icontains=query)|Q(post_office__icontains=query)|Q(pincode__icontains=query)|Q(course__code__icontains=query)))
+            
+        elif role in ['Academic Counsellor']:
 
+               all_students = students.objects.filter(active_status = True,batch_academic_counsellor_profile=request.user)
+
+
+               if query :
+
+                all_students = students.objects.filter(Q(active_status=True)&Q(batch_academic_counsellorprofile=request.user)&(Q(first_nameicontains=query)|Q(last_nameicontains=query)|Q(post_officeicontains=query)|Q(contacticontains=query)|Q(pin_codeicontains=query)|Q(house_nameicontains=query)|Q(emailicontains=query)|Q(coursenameicontains=query)|Q(batchnameicontains=query)|Q(district_icontains=query)))
 
         else :
 
@@ -84,14 +102,15 @@ class StudentsListView(View):
 
                all_students = students.objects.filter(Q(active_status=True)&(Q(first_name__icontains=query)|Q(last_name__icontains=query)|Q(contact_num__icontains=query)|Q(house_name__icontains=query)|Q(post_office__icontains=query)|Q(pincode__icontains=query)|Q(course__code__icontains=query)))
 
-        for student in all_students:
+        # for student in all_students:
 
-            print(student.photo)
+        #     print(student.photo)
 
         data = {'students' : all_students,'query' : query}
 
         return render(request, "students/students.html",context=data)
-# @method_decorator(permission_roles(roles=['Admin','Sales']),name='dispatch')
+    
+@method_decorator(permission_roles(roles=['Admin','Sales']),name='dispatch')
 class StudentRegisterView(View):
 
      def get(self,request,*args,**kwargs):
@@ -99,11 +118,13 @@ class StudentRegisterView(View):
 
         form = StudentRegisterForm()
 
+        
+
         # data = {'districts':DistrictChoices,'batches':BatchChoices, 'courses':CourseChoices,'Trainers':TrainerChoices,'form':form}
 
         #data = {'numbers':[1,2,3,4,5]}
         
-        data = {'form' : form}
+        data = {'form':form}
 
         return render(request,"students/register.html",context=data)
     
@@ -133,7 +154,39 @@ class StudentRegisterView(View):
 
                 student.save()
 
-            return redirect('students-list')
+                # payment section 
+
+                fee = student.course.offer_fee if student.course.offer_fee else student.course.fee
+
+                Payment.objects.create(student=student,amount = fee)
+
+                
+            
+                # if payment_structure_form.is_valid()
+
+                # sending login credentials to student through mail
+
+                subject = 'Login Credentials'
+
+                recepients = [student.email]
+
+                template = 'email/login-credential.html'
+
+                join_date = student.join_date
+
+                date_after_10_days = join_date + datetime.timedelta(days=10)
+
+                print(date_after_10_days)
+
+                context = {'name':f'{student.first_name} {student.last_name}','username':username,'password':password,'date_after_10_days': date_after_10_days}
+
+                # send_email(subject,recepients,template,context)
+
+                thread = threading.Thread(target=send_email,args=(subject,recepients,template,context))
+
+                thread.start()
+
+                return redirect('students-list')
         
         else :
 
@@ -195,7 +248,7 @@ class StudentRegisterView(View):
         
 
 
-        return render(request,"students/students.html")
+        # return render(request,"students/students.html")
 # @method_decorator(permission_roles(roles=['Admin','Sales']),name='dispatch')    
 class StudentDetailView(View):
 

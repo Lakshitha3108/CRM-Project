@@ -1,0 +1,40 @@
+{%extends 'base.html'%}
+{%block main%}
+<main class="h-full pb-16 overflow-y-auto">
+    <div class="container grid px-6 py-4 mx-auto">
+      <div
+      class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800"
+    >
+    <div class="flex items-center space-x-6">
+      <img src="{{trainer.photo.url}}" alt="trainer Photo" class="w-56 h-56 rounded-lg  border-4 border-blue-500">
+      <div>
+        <h2 class="text-2xl font-semibold text-gray-800">{{trainer.first_name}} {{trainer.last_name}}</h2>
+        <p class="text-sm text-gray-500">{{trainer.email}}</p>
+        <p class="text-sm text-gray-500">{{trainer.contact}}</p>
+      </div>
+    </div>
+    <div class="flex items-center space-x-6 my-6">
+      <span class="font-medium text-gray-700">Employee ID:</span>
+      <span class="text-gray-600">{{trainer.employee_id}}</span>
+    </div>
+    <div class="flex items-center space-x-6 my-6">
+      <span class="font-medium text-gray-700">Course:</span>
+      <span class="text-gray-600">{{trainer.course.code}}</span>
+    </div>
+    <div class="flex items-center space-x-6 my-6">
+        <span class="font-medium text-gray-700">Qualification:</span>
+        <span class="text-gray-600">{{trainer.qualification}}</span>
+      </div>
+    <div class="flex items-center space-x-6 my-6">
+        <span class="font-medium text-gray-700">Stream:</span>
+        <span class="text-gray-600">{{trainer.stream}}</span>
+      </div>
+    <div class="flex items-center space-x-6 my-6">
+      <span class="font-medium text-gray-700">Address:</span>
+      <span class="text-gray-600">{{trainer.house_name}},{{trainer.post_office}} P O {{trainer.district}}</span>
+    </div>
+  
+      </div>
+    </div>
+  </main>
+{%endblock%}

@@ -1,13 +1,13 @@
 {%extends 'base.html'%}
-{%block section%}
+{%block main%}
 <main class="h-full pb-16 overflow-y-auto">
     <form action="" method="post" enctype="multipart/form-data">
-       {%csrf_token%}
+        {%csrf_token%}
     <div class="container px-6 mx-auto grid">
       <h2
         class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200"
       >
-        Register
+        Update Trainer Details
       </h2>
       <!-- CTA -->
       <h4
@@ -18,16 +18,15 @@
       <div
         class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800"
       >
-      
         <label class="block text-sm">
           <span class="text-gray-700 dark:text-gray-400">First Name</span><span class="text-red-600">*</span>
           {{form.first_name}}
-          <!-- <input name="first_name" 
-           required
+          <!-- <input name="first_name"
+          required
             type="text"
             class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-            placeholder="" -->
-          <!-- /> -->
+            placeholder=""
+          /> -->
         </label>
 
         <label class="block text-sm mt-4">
@@ -37,19 +36,20 @@
             required
               type="text"
               class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-              placeholder="" -->
-            <!-- /> -->
+              placeholder=""
+            /> -->
           </label>
 
         <label class="block text-sm mt-4">
             <span class="text-gray-700 dark:text-gray-400">Photo</span><span class="text-red-600">*</span>
             {{form.photo}}
+            <img src="{{form.instance.photo.url}}" alt="" class="w-56 h-56 rounded-lg  border-4 border-blue-500">
             <!-- <input name="photo"
             required
               type="file"
               class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-              placeholder="" -->
-            <!-- /> -->
+              placeholder=""
+            /> -->
           </label>
 
           <label class="block text-sm mt-4">
@@ -59,24 +59,18 @@
             required
               type="email"
               class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-              placeholder="" -->
-            <!-- /> -->
-
-            {%if form.email.errors%}
-            <span class="text-xs text-red-600 dark:text-red-400">
-              {{form.email.errors}}
-              </span>
-              {%endif%}
+              placeholder=""
+            /> -->
           </label>
           <label class="block text-sm mt-4">
             <span class="text-gray-700 dark:text-gray-400">Contact Number</span><span class="text-red-600">*</span>
-            {{form.contact_num}}
-            <!-- <input name="contact_num"
+            {{form.contact}}
+            <!-- <input name="contact_number"
             required
               type="text"
               class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-              placeholder="" -->
-            <!-- /> -->
+              placeholder=""
+            /> -->
           </label>
           <label class="block text-sm mt-4">
             <span class="text-gray-700 dark:text-gray-400">House Name</span><span class="text-red-600">*</span>
@@ -85,8 +79,8 @@
             required
               type="text"
               class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-              placeholder="" -->
-            <!-- /> -->
+              placeholder=""
+            /> -->
           </label>
           <label class="block text-sm mt-4">
             <span class="text-gray-700 dark:text-gray-400">Post Office</span><span class="text-red-600">*</span>
@@ -95,23 +89,24 @@
             required
               type="text"
               class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-              placeholder="" -->
-            <!-- /> -->
+              placeholder=""
+            /> -->
           </label>
           <label class="block mt-4 text-sm">
             <span class="text-gray-700 dark:text-gray-400">
               District
             </span>
             {{form.district}}
-            <!-- <select name="district"
+            <!-- <select name="districts"
             required
-              class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+              class=" block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
             >
-            {%for district in districts%} 
-                <option value="{{district.value}}">{{district.label}}</option>
-                {%endfor%}  -->
-              <!-- /> -->
-            </select>
+            {%for district in districts%}
+              <option value="{{district.value}}">{{district.label}}</option> 
+
+            {%endfor%}
+              
+            </select> -->
           </label>
           <label class="block text-sm mt-4">
             <span class="text-gray-700 dark:text-gray-400">Pincode</span><span class="text-red-600">*</span>
@@ -126,8 +121,16 @@
           {%if form.pincode.errors%}
           <span class="text-xs text-red-600 dark:text-red-400">
             {{form.pincode.errors}}
-            </span>
-            {%endif%}
+          </span>
+          {%endif%}
+        </div>
+        <label class="block text-sm mt-4">
+            <span class="text-gray-700 dark:text-gray-400">Qualification</span><span class="text-red-600">*</span>
+            {{form.qualification}}
+          </label><label class="block text-sm mt-4">
+            <span class="text-gray-700 dark:text-gray-400">Stream</span><span class="text-red-600">*</span>
+            {{form.stream}}
+          </label>
         </div>
         <h4
             class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300 mt-4"
@@ -142,60 +145,63 @@
               required
                 class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
               >
-              {%for course in courses%} 
+              {%for course in courses%}
                 <option value="{{course.value}}">{{course.label}}</option>
-                {%endfor%}  -->
+                {%endfor%}
                 
-              
-              <!-- </select> -->
+              </select> -->
             </label>
-            <label class="block mt-4 text-sm">
+            <label class="block text-sm mt-4">
+                <span class="text-gray-700 dark:text-gray-400">ID Card</span><span class="text-red-600">*</span>
+                {{form.id_card}}
+                <!-- <input name="photo"
+                required
+                  type="file"
+                  class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                  placeholder=""
+                /> -->
+              </label>
+            <!-- <label class="block mt-4 text-sm">
               <span class="text-gray-700 dark:text-gray-400">Batch</span><span class="text-red-600">*</span>
-              {{form.batch}}
-              <!-- <select name="batch"
-              required
+              {{form.batch}} -->
+              <!-- <select name="batch" required
                 class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
               >
-              {%for batch in batches%} 
-                <option value="{{batch.value}}">{{batch.label}}</option>
-                {%endfor%}  -->
-              
-              
-              <!-- </select> -->
-            </label>
+              {%for batch in batches%}
+              <option value="{{batch.value}}">{{batch.label}}</option>
+              {%endfor%}
+                
+              </select> -->
+            <!-- </label> -->
             <!-- <label class="block text-sm mt-4">
               <span class="text-gray-700 dark:text-gray-400">Batch Date</span><span class="text-red-600">*</span>
-              {{form.batch_date}} -->
-              <!-- <input name="batch_date"
-              required
+              {{form.batch_date}}
+              <input name="batch_date" required
                 type="date"
                 class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                placeholder="" -->
-              <!-- /> -->
-            </label>
-            <label class="block mt-4 text-sm">
+                placeholder=""
+              /> 
+            </label> -->
+            <!-- <label class="block mt-4 text-sm">
                 <span class="text-gray-700 dark:text-gray-400">Trainer</span><span class="text-red-600">*</span>
-                {{form.trainer}}
-                <!-- <select name="trainer" 
-                required
+                {{form.trainer}} -->
+                <!-- <select name="trainer" required
                   class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
                 >
-                
-              {%for Trainer in Trainers%} 
-                <option value="{{Trainer.value}}">{{Trainer.label}}</option>
-                {%endfor%} 
-                   -->
-                <!-- </select> -->
-              </label> 
+                {%for trainer in trainers%}
+                <option value="{{trainer.value}}">{{trainer.label}}</option>
+                {%endfor%}
+                  
+                </select> -->
+              <!-- </label> -->
               <div class="flex items-center justify-end">
                 <button type="submit" class="px-5 py-3 my-6 font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
-                    Register
+                    Update
                   </button>
               </div>
           </div>
     </div>
 </form>
-
   </main>
 
 {%endblock%}
